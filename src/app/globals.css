@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+@theme {
+  --color-page: #f2f4f7;
+  --color-surface: #ffffff;
+  --color-ink: #172036;
+  --color-ink-soft: #4a5468;
+  --color-rule: #d9dee7;
+  --color-mark: #ffd43b;
+  --color-mark-soft: #fff3c4;
+  --color-ok: #1f7a4d;
+  --color-ok-soft: #e3f3ea;
+  --color-bad: #b42318;
+  --color-bad-soft: #fdecea;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-mark);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* Wide, heavy headline cut of Archivo. The one loud thing on every page. */
+  .display {
+    font-weight: 800;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+  }
+
+  .heading {
+    font-weight: 700;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  /* Long-form text: comfortable measure and rhythm. */
+  .prose-body > * + * {
+    margin-top: 1em;
+  }
+  .prose-body a {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-mark);
+  }
+  .prose-body a:hover {
+    background: var(--color-mark-soft);
+  }
+
+  /* Highlighter underline used for links in the tool index. */
+  .marker-link {
+    background-image: linear-gradient(var(--color-mark), var(--color-mark));
+    background-size: 0% 0.42em;
+    background-position: 0 88%;
+    background-repeat: no-repeat;
+    transition: background-size 180ms ease-out;
+  }
+  .marker-link:hover,
+  .marker-link:focus-visible {
+    background-size: 100% 0.42em;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    font-weight: 650;
+    transition: background-color 120ms, color 120ms, border-color 120ms;
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+  .btn-primary {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-primary:not(:disabled):hover {
+    background: #26334f;
+  }
+  .btn-mark {
+    background: var(--color-mark);
+    color: var(--color-ink);
+  }
+  .btn-mark:not(:disabled):hover {
+    background: #ffc800;
+  }
+  .btn-ghost {
+    border: 2px solid var(--color-rule);
+    color: var(--color-ink);
+    background: var(--color-surface);
+  }
+  .btn-ghost:not(:disabled):hover {
+    border-color: var(--color-ink);
+  }
+
+  .field {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--color-rule);
+    border-radius: 10px;
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+  }
+
+  .chip {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 2px solid var(--color-rule);
+    border-radius: 999px;
+    background: var(--color-surface);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .chip[aria-pressed="true"],
+  .chip[aria-checked="true"] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: #fff;
+  }
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-indeterminate {
+  animation: indeterminate 1.3s ease-in-out infinite;
+}
+.animate-rise {
+  animation: rise 260ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .animate-indeterminate {
+    animation: none;
+    width: 100% !important;
+    opacity: 0.6;
+  }
+}
