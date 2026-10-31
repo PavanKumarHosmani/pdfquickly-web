@@ -11,47 +11,20 @@ npm run dev        # http://localhost:3000
 npm run build      # production build; every route should show ○ or ● (static)
 ```
 
-`http://localhost:3000` is already in the backend's CORS list, so local dev works against the live API.
+`http://localhost:3000` is in the backend and S3 CORS lists, so local dev works against the live API.
 
-## Before you launch: backend and AWS changes
+## Running in production
 
-The site won't work on pdfquickly.com until these are done.
+The site is live on Vercel at **pdfquickly.com** and calls the API at **api.pdfquickly.com**
+(Spring Boot on EC2, files in S3). Push to `main` and Vercel publishes it.
 
-**1. Backend CORS.** Add the new domain to `app.cors.allowed-origins` in `application.properties`:
+How it all fits together, every setting, deploying the API, and a troubleshooting table
+are in **[docs/OPERATIONS.md](docs/OPERATIONS.md)**. Two things that are easy to get wrong:
 
-```
-app.cors.allowed-origins=http://localhost:3000,https://pdfquickly.com,https://www.pdfquickly.com,https://pdfsmerger.com,https://www.pdfsmerger.com,https://jpgs-to-pdf-com.vercel.app,https://www.jpgstopdf.com,https://pdfsmerger-frontend.vercel.app
-```
-
-**2. S3 bucket CORS.** The browser uploads straight to S3 and downloads the result from it. In the S3 console:
-bucket `processingfilesbucket` → Permissions → Cross-origin resource sharing (CORS). Keep your existing origins and add pdfquickly.com:
-
-```json
-[
-  {
-    "AllowedOrigins": ["https://pdfquickly.com", "https://www.pdfquickly.com", "http://localhost:3000"],
-    "AllowedMethods": ["PUT", "GET"],
-    "AllowedHeaders": ["*"],
-    "ExposeHeaders": ["ETag", "Content-Length"],
-    "MaxAgeSeconds": 3000
-  }
-]
-```
-
-If GET isn't allowed, downloads still work, but the file opens from the S3 link instead of downloading with a proper name.
-
-**3. S3 lifecycle rule (needed for the privacy promise).** The site says files are deleted within 24 hours.
-The backend deletes some inputs, but never deletes results. Add a rule: bucket → Management → Create lifecycle rule →
-apply to all objects → "Expire current versions of objects" after 1 day. Also tick "Delete expired object delete markers
-or incomplete multipart uploads" and set incomplete uploads to 1 day.
-
-## Deploy on Vercel
-
-1. Push this folder to a new GitHub repo.
-2. In Vercel: Add New → Project → import the repo. Defaults are correct; no settings needed.
-3. Optional: set `NEXT_PUBLIC_API_BASE_URL` if the API moves (see `.env.example`).
-4. Project → Settings → Domains: add `pdfquickly.com` and `www.pdfquickly.com`, and set the DNS records Vercel shows
-   at your domain registrar. `www` redirects to the bare domain (see `next.config.ts`).
+- A new website address must be added to the backend's CORS list **and** the S3 bucket's CORS list,
+  because the browser uploads and downloads files straight from S3.
+- In Vercel, `pdfquickly.com` is the production domain and `www` redirects to it. The reverse
+  makes a redirect loop with `next.config.ts`.
 
 ## After launch: get indexed
 
