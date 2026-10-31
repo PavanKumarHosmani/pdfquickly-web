@@ -12,7 +12,7 @@ export const site = {
    */
   contentUpdated: "2026-10-30T00:00:00+05:30",
   legalUpdated: "2026-10-29T00:00:00+05:30",
-  apiBaseUrl: (process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.jpgstopdf.com/api/v1").replace(/\/$/, ""),
+  apiBaseUrl: (process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.pdfquickly.com/api/v1").replace(/\/$/, ""),
 };
 
 export const absoluteUrl = (path = "/") => `${site.url}${path === "/" ? "" : path}`;
