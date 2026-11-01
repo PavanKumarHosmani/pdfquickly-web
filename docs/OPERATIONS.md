@@ -69,6 +69,7 @@ jpgstopdf.com and pdfsmerger.com are no longer used.
 | `NEXT_PUBLIC_API_BASE_URL` | `https://api.pdfquickly.com/api/v1` | Built into the pages. Must **not** be marked *Sensitive*; Vercel refuses that for `NEXT_PUBLIC_` names |
 | `GOOGLE_SITE_VERIFICATION` | — | Not needed; Google is verified by DNS |
 | `BING_SITE_VERIFICATION` | — | Not needed; Bing was imported from Google |
+| `ADMOB_PUBLISHER_ID` | `pub-…` (AdMob → Settings → Account information) | Serves https://pdfquickly.com/app-ads.txt for the Android app's ads. Returns 404 until set |
 
 None of these are secrets. A change only takes effect after **Redeploy** (on
 the latest deployment; redeploying an older one rebuilds old code).
@@ -227,8 +228,13 @@ Google picks changes up from the sitemap.
 - [ ] **Elastic IP.** Without one, stopping the instance changes its IP and
       `api.pdfquickly.com` stops working. EC2 → Elastic IPs → allocate,
       associate with the instance, then update the `api` A record and `EC2_HOST`.
-- [ ] **Contact email.** The site shows `hello@pdfquickly.com` (`contactEmail` in
-      `src/lib/site.ts`). Make sure that address receives mail, or change it.
+- [ ] **Contact email.** The site and both privacy policies show `hello@pdfquickly.com`
+      (`contactEmail` in `src/lib/site.ts`). Forward it to your inbox for free with ImprovMX:
+      add the domain at improvmx.com, then in DNS add `MX @ mx1.improvmx.com` (priority 10),
+      `MX @ mx2.improvmx.com` (priority 20) and `TXT @ v=spf1 include:spf.improvmx.com ~all`.
+      Send a test email once ImprovMX shows the domain as active.
+- [ ] **app-ads.txt.** Set `ADMOB_PUBLISHER_ID` in Vercel and redeploy; check
+      https://pdfquickly.com/app-ads.txt shows `google.com, pub-…, DIRECT, f08c47fec0942fa0`.
 - [ ] **Search engines.** Finish Google Search Console and Bing Webmaster Tools
       as in [Search engines](#search-engines), then tick the rows off there.
 - [ ] **Optional tidy-up.** Remove pdfsmerger.com and jpgstopdf.com addresses
