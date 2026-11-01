@@ -22,6 +22,7 @@ export function Footer() {
           links={[
             { href: "/about", label: "About" },
             { href: "/privacy", label: "Privacy" },
+            { href: "/app-privacy", label: "App privacy" },
             { href: "/terms", label: "Terms" },
             { href: "/contact", label: "Contact" },
           ]}

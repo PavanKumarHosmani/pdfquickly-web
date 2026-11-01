@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { TextPage } from "@/components/TextPage";
 import { site } from "@/lib/site";
 
@@ -11,9 +12,11 @@ export const metadata: Metadata = {
 // Review this with your own legal advice before launch, and keep it in step with what the backend actually does.
 export default function PrivacyPage() {
   return (
-    <TextPage title="Privacy Policy" updated="29 October 2026">
+    <TextPage title="Privacy Policy" updated="1 November 2026">
       <p>
-        This policy explains what happens to the files and information you give PDF Quickly ({site.url.replace("https://", "")}).
+        This policy explains what happens to the files and information you give the PDF Quickly website (
+        {site.url.replace("https://", "")}). The PDF Quickly Android app, which shows ads, has its own{" "}
+        <Link href="/app-privacy">app privacy policy</Link>.
       </p>
 
       <h2>Your files</h2>
@@ -38,7 +41,7 @@ export default function PrivacyPage() {
       </p>
 
       <h2>Cookies</h2>
-      <p>PDF Quickly doesn&apos;t use cookies for advertising or tracking.</p>
+      <p>The PDF Quickly website doesn&apos;t show ads or use cookies for advertising or tracking.</p>
 
       <h2>Changes</h2>
       <p>If this policy changes, the new version will be posted on this page with a new date.</p>

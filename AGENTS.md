@@ -18,6 +18,7 @@ happens in a separate backend.
 | Canonical URL | `https://pdfquickly.com` (no `www`) |
 | API | `https://api.pdfquickly.com/api/v1` |
 | Backend repo | `PavanKumarHosmani/File-Converter-backed` (Spring Boot, EC2). It has its own `AGENTS.md` |
+| Android app | **PDF Quickly** (`com.softcodeai.pdfquickly`), same brand and backend. This site hosts its privacy policy and `app-ads.txt` |
 
 ## Commands
 
@@ -75,6 +76,9 @@ src/app/[slug]/page.tsx          every tool page; dynamicParams = false + genera
 src/app/[slug]/opengraph-image.tsx  per-tool share image (also static)
 src/app/page.tsx                 home
 src/app/{about,privacy,terms,contact}  text pages
+src/app/app-privacy/page.tsx     Android app privacy policy: the URL in Play Console and the app menu. Keep it in step with
+                                 the app and the Play Data safety form (ads, data collected), or Play can reject the app
+src/app/app-ads.txt/route.ts     AdMob app-ads.txt from ADMOB_PUBLISHER_ID; 404 until set. Must stay at the site root
 src/app/{sitemap,robots,manifest}.ts   generated from content + site.ts
 src/content/tools.ts             ALL tool page content: slug, engine, copy, FAQs, presets, related
 src/lib/site.ts                  site name, canonical URL, apiBaseUrl, content dates
@@ -116,7 +120,8 @@ the default in `site.ts`) and redeploy. The value is inlined at build time.
    - JSON-LD must only describe visible content. No ratings or reviews, no `HowTo`.
    - When you change a page's copy, set its `updated` (or bump
      `site.contentUpdated`). `lastmod` must be truthful.
-4. **Don't make claims the system doesn't keep.** The privacy copy says files
+4. **Don't make claims the system doesn't keep.** The website shows no ads; only the
+   Android app does (AdMob). Keep `/privacy` and `/app-privacy` saying so. The privacy copy says files
    are deleted within 24 hours. That depends on an S3 lifecycle rule (see
    OPERATIONS.md open items). Don't add promises like "files never leave your
    device" — they do.
