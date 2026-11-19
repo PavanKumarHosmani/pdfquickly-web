@@ -45,6 +45,7 @@ function kbPage(p: {
   aboutHeading: string;
   about: string[];
   faqs: { q: string; a: string }[];
+  updated?: string;
 }): ToolPage {
   return {
     slug: `compress-image-to-${p.kb}kb`,
@@ -69,6 +70,7 @@ function kbPage(p: {
     about: p.about,
     faqs: [...p.faqs, PRIVACY_FAQ],
     related: [...KB_SIZES.filter((k) => k !== p.kb).map((k) => `compress-image-to-${k}kb`), "compress-image", "jpg-to-pdf"],
+    updated: p.updated,
   };
 }
 
@@ -77,6 +79,11 @@ const CONVERTER_FAQ: Record<string, { q: string; a: string }> = {
   "png-to-jpg": { q: "How much smaller will my file get?", a: "For photos and screenshots with lots of colour, often 70 to 90 percent smaller. Simple graphics with flat colours shrink less, and may look better kept as PNG." },
   "webp-to-jpg": { q: "Why do saved images from websites come out as WebP?", a: "Websites use WebP because it loads faster. Your browser saves the file in the format the site sent, even though many other apps can't open it." },
   "webp-to-png": { q: "Should I pick PNG or JPG for a WebP file?", a: "PNG for logos, icons and anything with a transparent background. JPG for photos, where it gives a much smaller file." },
+};
+
+// When a converter page's own copy last changed (sitemap lastmod). Others use site.contentUpdated.
+const CONVERTER_UPDATED: Record<string, string | undefined> = {
+  "png-to-jpg": "2026-11-19T00:00:00+05:30",
 };
 
 const CONVERTER_FAQ_2: Record<string, { q: string; a: string }> = {
@@ -399,12 +406,15 @@ export const tools: ToolPage[] = [
       "A 20 KB limit usually appears on application forms that ask for a scanned signature or a very small photo. A phone camera picture is typically 2 to 5 MB, about a hundred times too large.",
       "For a signature, sign in dark ink on plain white paper, take the photo in good light, then crop tightly around the signature in your phone's photo editor before compressing. White space costs bytes, and removing it leaves more of the 20 KB for the ink itself.",
       "The tool lowers JPEG quality step by step and, if that isn't enough, reduces the pixel dimensions until the file fits. The result is always a JPG, which these forms expect.",
+      "Read the form's rules before you start. Many give a range rather than just a maximum, such as 10 KB to 20 KB for a signature, and some also fix the pixel size. Aim just under the maximum: a file far below the limit is more likely to fall under the minimum and look blurry when it's checked.",
     ],
     faqs: [
       { q: "My signature looks faint after compressing. What can I do?", a: "Re-take the photo with darker ink and brighter light, and crop closely around the signature. High contrast survives compression far better than pale pen on grey paper." },
       { q: "The form also gives exact pixel dimensions. Which do I do first?", a: "Resize it to those dimensions in your phone's photo editor first, then compress here. Compressing first and resizing afterwards can push the size back over the limit." },
       { q: "Can I go below 20 KB?", a: "Yes. Type any target from 5 KB in the size box." },
+      { q: "The form still rejects my file even though it's under 20 KB. Why?", a: "Size is usually only one of the checks. Look for a minimum size, exact pixel dimensions, or a required file type such as JPG or JPEG. The file from here is always a JPG, so check the other two and adjust before compressing again." },
     ],
+    updated: "2026-11-19T00:00:00+05:30",
   }),
   kbPage({
     kb: 50,
@@ -470,6 +480,7 @@ export const tools: ToolPage[] = [
         "JPG has no transparency, so transparent areas are filled with white. For logos that need a clear background, keep PNG.",
       
         "This is the usual fix when an upload form rejects a screenshot for being too large, or when a gallery app shows a PNG photo as several megabytes. Set quality around 80 to 90 percent for the best balance.",
+        "Phones save screenshots as PNG, so a screenshot of a payment receipt, a chat or a booking confirmation is often over 1 MB. As a JPG at 90 percent quality it's usually a small fraction of that, with the text still sharp enough to read.",
       ]],
       ["webp-to-jpg", "WebP", "JPG", "jpg", "Turn WebP images from the web into JPG", [
         "Many sites serve images as WebP, so that's what you get when you save one. Plenty of apps, printers and upload forms still won't take WebP.",
@@ -515,6 +526,7 @@ export const tools: ToolPage[] = [
         PRIVACY_FAQ,
       ],
       related: ["image-converter", "compress-image", "jpg-to-pdf"],
+      updated: CONVERTER_UPDATED[slug],
     }),
   ),
 ];
